@@ -1,6 +1,11 @@
 import child_process from 'child_process';
 
-const STREAMS = ['streams/trojka.pls', 'streams/rmfmaxxx.pls'];
+const STREAMS = [
+  { filename: 'streams/trojka.pls', id: 'trojka' },
+  { filename: 'streams/hit.pls', id: 'hit' },
+  { filename: 'streams/kolor.pls', id: 'kolor' },
+  { filename: 'streams/rmfmaxxx.pls', id: 'rmfmaxxx' }
+];
 
 export default class Player {
   stop() {
@@ -22,8 +27,14 @@ export default class Player {
     });
   }
   play(streamId) {
-    let filename = STREAMS[streamId];
-    this.mplayer = child_process.spawn('mplayer', ['-playlist', filename]);
+    console.log('play: ' + streamId);
+    if (this.isPlaying()) {
+      console.log('stopping');
+      this.stop();
+    }
+    let stream = STREAMS.filter(s => s.id === streamId)[0];
+    console.log(`starting stream ${stream.filename}`);
+    this.mplayer = child_process.spawn('mplayer', ['-playlist', stream.filename]);
     this.attachEvents();
   }
 }

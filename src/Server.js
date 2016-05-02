@@ -12,11 +12,7 @@ export default class Server {
       console.log("received connection");
       socket.on('select', ({ stationId }) => {
         console.log(`selected ${stationId}`);
-        if (this.player.isPlaying()) {
-          this.player.stop();
-        } else {
-          this.player.play(0);
-        }
+        this.player.play(stationId);
       });
     });
   }
