@@ -12,7 +12,11 @@ export default class Server {
       console.log("received connection");
       socket.on('select', ({ stationId }) => {
         console.log(`selected ${stationId}`);
-        this.player.play(stationId);
+        this.player.playRadio(stationId);
+      });
+      socket.on('playYoutube', ({ url }) => {
+        console.log(`playing youtube ${url}`);
+        this.player.playYoutube(url);
       });
     });
   }

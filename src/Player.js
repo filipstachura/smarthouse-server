@@ -16,7 +16,7 @@ export default class Player {
     return this.mplayer !== undefined;
   }
   attachEvents() {
-    this.mplayer.stdout.on('data', (data) => {});
+    this.mplayer.stdout.on('data', (data) => {console.log(data.toString())});
     this.mplayer.stderr.on('data', (data) => {
       console.log(`mplayer stderr: ${data}`);
     });
@@ -26,15 +26,25 @@ export default class Player {
       }
     });
   }
-  play(streamId) {
-    console.log('play: ' + streamId);
+  getReady() {
     if (this.isPlaying()) {
       console.log('stopping');
       this.stop();
     }
+  }
+  playRadio(streamId) {
+    this.getReady();
+    console.log('play: ' + streamId);
     let stream = STREAMS.filter(s => s.id === streamId)[0];
     console.log(`starting stream ${stream.filename}`);
     this.mplayer = child_process.spawn('mplayer', ['-playlist', stream.filename]);
+    this.attachEvents();
+  }
+  playYoutube(url) {
+    this.getReady();
+    console.log('play youtube: ' + url);
+    this.mplayer = child_process.spawn('./bash/playYoutube.sh', [url])
+      .on('error', function( err ){ throw err });
     this.attachEvents();
   }
 }
