@@ -1,8 +1,9 @@
 import SocketServer from 'socket.io';
 
 export default class Server {
-  constructor(player) {
+  constructor(player, systemController) {
     this.player = player;
+    this.system = systemController;
   }
   start() {
     console.log("starting server...");
@@ -13,6 +14,14 @@ export default class Server {
       socket.on('select', ({ stationId }) => {
         console.log(`selected ${stationId}`);
         this.player.playRadio(stationId);
+      });
+      socket.on('volumeUp', () => {
+        console.log(`turning volume up`);
+        this.system.volumeUp();
+      });
+      socket.on('volumeDown', () => {
+        console.log(`turning volume down`);
+        this.system.volumeDown();
       });
       socket.on('turnOffRadio', () => {
         console.log(`turning off radio`);
