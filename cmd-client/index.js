@@ -10,5 +10,6 @@ var socket = require('socket.io-client')(serverURL, {
 });
 
 console.log('sending ' + action + ' to server: ' + serverIp);
-socket.emit(action);//, { url });
-process.exit()
+
+var emitOut = socket.emit(action);
+setTimeout(process.exit, 100);
